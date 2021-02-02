@@ -1,0 +1,9 @@
+{
+	"name": "taurus",
+	"targetType": "library",
+	"targetPath": "bin",
+	"sourcePaths": ["source"],
+	"importPaths": [
+		"source"
+	]
+}
