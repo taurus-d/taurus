@@ -1,0 +1,10 @@
+# Object files
+*.o
+*.obj
+*~
+
+# Dub specific files
+.dub/
+
+# Binary path
+/bin/
