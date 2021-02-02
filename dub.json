@@ -1,0 +1,8 @@
+{
+	"name": "taurus",
+	"targetType": "library",
+	"targetPath": "bin",
+	"sourceFiles": [
+		"source/taurus/math/trignometry/cos.d"
+	]
+}
