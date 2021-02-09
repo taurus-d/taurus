@@ -108,3 +108,66 @@ unittest
     alias F_dglit = FunctionTypeOf!((int a){ return a; });
     static assert(is(F_dglit* : int function(int)));
 }
+
+
+/**
+ * Get the type of the return value from a function, a pointer to function, a
+ *     delegate, a struct with an opCall, a pointer to a struct with an opCall,
+ *     or a class with an `opCall`.
+ */
+template ReturnType(func ...)
+if (func.length == 1 && isCallable!func)
+{
+    static if (is(FunctionTypeOf!func R == return))
+        alias ReturnType = R;
+    else
+        static assert(0, "argument has no return type");
+}
+
+///
+@safe pure nothrow @nogc
+unittest
+{
+    int foo();
+    ReturnType!foo x;   // x is declared as int
+}
+
+///
+@safe pure nothrow @nogc
+unittest
+{
+    struct G
+    {
+        int opCall (int i) { return 1;}
+    }
+
+    alias ShouldBeInt = ReturnType!G;
+    static assert(is(ShouldBeInt == int));
+
+    G g;
+    static assert(is(ReturnType!g == int));
+
+    G* p;
+    alias pg = ReturnType!p;
+    static assert(is(pg == int));
+
+    class C
+    {
+        int opCall (int i) { return 1;}
+    }
+
+    static assert(is(ReturnType!C == int));
+
+    C c;
+    static assert(is(ReturnType!c == int));
+
+    class Test
+    {
+        int prop() @property { return 0; }
+    }
+    alias R_Test_prop = ReturnType!(Test.prop);
+    static assert(is(R_Test_prop == int));
+
+    alias R_dglit = ReturnType!((int a) { return a; });
+    static assert(is(R_dglit == int));
+}
